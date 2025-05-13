@@ -1,17 +1,25 @@
-import { FC } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { ProfileMenuUI } from '@ui';
-import { useDispatch } from '@store';
-import { logoutUser } from '../../services/slices/userSlice/userSlice';
+import React, { FC } from 'react';
+import { OrderStatusProps } from './type';
+import { OrderStatusUI } from '@ui';
 
-export const ProfileMenu: FC = () => {
-  const { pathname } = useLocation();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const handleLogout = () => {
-    dispatch(logoutUser());
-    navigate('/');
-  };
+const statusText: { [key: string]: string } = {
+  pending: 'Готовится',
+  done: 'Выполнен',
+  created: 'Создан'
+};
 
-  return <ProfileMenuUI handleLogout={handleLogout} pathname={pathname} />;
+export const OrderStatus: FC<OrderStatusProps> = ({ status }) => {
+  let textStyle = '';
+  switch (status) {
+    case 'pending':
+      textStyle = '#E52B1A';
+      break;
+    case 'done':
+      textStyle = '#00CCCC';
+      break;
+    default:
+      textStyle = '#F2F2F3';
+  }
+
+  return <OrderStatusUI textStyle={textStyle} text={statusText[status]} />;
 };
