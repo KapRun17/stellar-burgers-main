@@ -1,3 +1,5 @@
+import { FC } from 'react';
+
 import styles from './constructor-page.module.css';
 
 import { ConstructorPageUIProps } from './type';

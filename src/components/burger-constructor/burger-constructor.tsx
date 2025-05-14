@@ -43,7 +43,6 @@ export const BurgerConstructor: FC = () => {
     dispatch(resetModal());
   };
 
-
   const price = useMemo(
     () =>
       (constructorItems.bun ? constructorItems.bun.price * 2 : 0) +
@@ -53,7 +52,6 @@ export const BurgerConstructor: FC = () => {
       ),
     [constructorItems]
   );
-
 
   return (
     <BurgerConstructorUI

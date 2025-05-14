@@ -4,7 +4,6 @@ import { TIngredient } from '@utils-types';
 import { IngredientsCategoryUI } from '../ui/ingredients-category';
 import { useSelector } from '@store';
 import { getConstructorState } from '../../services/slices/constructorSlice/constructorSlice';
-import { ConstructorPage } from '@pages';
 
 export const IngredientsCategory = forwardRef<
   HTMLUListElement,
@@ -13,7 +12,7 @@ export const IngredientsCategory = forwardRef<
   const constructorItems = useSelector(getConstructorState).constructorItems;
 
   const ingredientsCounters = useMemo(() => {
-    const { bun, ingredients } = ConstructorItems;
+    const { bun, ingredients } = constructorItems;
     const counters: { [key: string]: number } = {};
     ingredients.forEach((ingredient: TIngredient) => {
       if (!counters[ingredient._id]) counters[ingredient._id] = 0;

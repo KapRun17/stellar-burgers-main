@@ -1,51 +1,38 @@
-import { getFeedsApi } from '../../../utils/burger-api';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { TOrder } from '@utils-types';
+import feedSlice, { getFeeds, initialState } from './feedSlice';
 
-type TFeedState = {
-  orders: TOrder[];
-  total: number;
-  totalToday: number;
-  loading: boolean;
-  error: string | null;
-};
+describe('тестирование редьюсера feedSlice', () => {
+  describe('тестирование асинхронного GET экшена getFeeds', () => {
+    const actions = {
+      pending: {
+        type: getFeeds.pending.type,
+        payload: null
+      },
+      rejected: {
+        type: getFeeds.rejected.type,
+        error: { message: 'Funny mock-error' }
+      },
+      fulfilled: {
+        type: getFeeds.fulfilled.type,
+        payload: { orders: ['order1', 'order2'] }
+      }
+    };
 
-export const initialState: TFeedState = {
-  orders: [],
-  total: 0,
-  totalToday: 0,
-  loading: false,
-  error: null
-};
+    test('тест синхронного экшена getFeeds.pending', () => {
+      const state = feedSlice(initialState, actions.pending);
+      expect(state.loading).toBe(true);
+      expect(state.error).toBe(actions.pending.payload);
+    });
 
-export const getFeeds = createAsyncThunk('feeds/all', getFeedsApi);
+    test('тест синхронного экшена getFeeds.rejected', () => {
+      const state = feedSlice(initialState, actions.rejected);
+      expect(state.loading).toBe(false);
+      expect(state.error).toBe(actions.rejected.error.message);
+    });
 
-export const feedSlice = createSlice({
-  name: 'feed',
-  initialState,
-  reducers: {},
-  selectors: {
-    getFeedState: (state) => state
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(getFeeds.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(getFeeds.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message as string;
-      })
-      .addCase(getFeeds.fulfilled, (state, action) => {
-        state.loading = false;
-        state.error = null;
-        state.orders = action.payload.orders;
-        state.total = action.payload.total;
-        state.totalToday = action.payload.totalToday;
-      });
-  }
+    test('тест синхронного экшена getFeeds.fulfilled', () => {
+      const nextState = feedSlice(initialState, actions.fulfilled);
+      expect(nextState.loading).toBe(false);
+      expect(nextState.orders).toEqual(actions.fulfilled.payload.orders);
+    });
+  });
 });
-
-export const { getFeedState } = feedSlice.selectors;
-export default feedSlice.reducer;

@@ -11,7 +11,6 @@ import {
 import { getIngredientState } from '../../services/slices/ingredientSlice/ingredientSlice';
 
 export const OrderInfo: FC = () => {
-  /** TODO: взять переменные orderData и ingredients из стора */
   const number = Number(useParams().number);
   const { ingredients } = useSelector(getIngredientState);
   const { orderByNumberResponse, request } = useSelector(getOrderState);
